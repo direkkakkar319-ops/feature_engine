@@ -85,9 +85,13 @@ def test_raises_non_fitted_error_when_error_during_fit(estimator):
         "ArbitraryNumberImputer",
     ]:
         X = pd.DataFrame({"cat1": ["a", "b", "c", "a", "b"]})
+
+    elif estimator.__class__.__name__ == "CategoricalImputer":
+        estimator.set_params(ignore_format=False)
+        X = pd.DataFrame({"num1": [1.0, 2.0, 3.0, 4.0, 5.0]})
+
     else:
-        X = pd.DataFrame({"num1": [1.0, 2.0, nan, 4.0, 5.0]})
-        X.loc[len(X) - 1] = nan
+        X = pd.DataFrame()
 
     with pytest.raises((ValueError, TypeError)):
         estimator.fit(X)
